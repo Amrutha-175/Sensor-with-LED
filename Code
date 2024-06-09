@@ -1,0 +1,43 @@
+#include <LiquidCrystal.h>
+
+// Initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(1,4,7,9,10,11);
+int LED = 6;
+int buzzer=52; // connect LED to Arduino pin 8
+int sensor=8;
+
+void setup() {
+  Serial.begin(9600); // Init Serial at 9600 Baud
+  Serial.println("Serial Working");
+  pinMode(LED, OUTPUT);
+  pinMode(buzzer,OUTPUT);
+
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  lcd.print("Sensor Ready");
+}
+
+void loop() {
+  int sensorStatus = digitalRead(sensor); // Read the IR sensor status
+
+  if (sensorStatus == 1) { // Check if the pin is high
+    // if the pin is high, turn off the LED and the relay
+    digitalWrite(LED, HIGH); 
+    digitalWrite(buzzer,HIGH);// LED LOW
+
+    Serial.println("Motion Detected!"); // Print "Motion Ended!" to the serial monitor
+    lcd.clear();
+    lcd.print("Motion Detected!");
+  } else {
+    // else turn on the LED and the relay
+    digitalWrite(LED, LOW); // LED HIGH
+    digitalWrite(buzzer,LOW);
+  
+
+    Serial.println("Motion Ended!"); // Print "Motion Detected!" to the serial monitor
+    lcd.clear();
+    lcd.print("Motion Ended!");
+  }
+
+  delay(500); // Small delay to prevent LCD flickering
+}
